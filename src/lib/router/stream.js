@@ -1,9 +1,8 @@
 import { error } from 'quiver-util/error'
 import { StreamHandlerBuilder } from 'quiver-component-basic'
 
+import { routerClass } from './router'
 import { StreamRouteList } from './route-list'
-
-const $routeList = Symbol('@routeList')
 
 const indexToStreamRouter = routeIndex =>
   async function(args, streamable) {
@@ -25,24 +24,12 @@ const indexBuilderToStreamRouterBuilder = routeIndexBuilder =>
     routeIndexBuilder(config)
     .then(indexToStreamRouter)
 
-export class StreamRouter extends StreamHandlerBuilder {
-  constructor(options) {
-    super(options)
-    this.setSubComponent($routeList, new StreamRouteList())
-  }
+const Router = routerClass(StreamHandlerBuilder, StreamRouteList)
 
-  addRoute(route) {
-    this.routeList.addRoute(route)
-    return this
-  }
-
+export class StreamRouter extends Router {
   streamHandlerBuilderFn() {
     const routeIndexBuilder = this.routeList.routeIndexBuilderFn()
     return indexBuilderToStreamRouterBuilder(routeIndexBuilder)
-  }
-
-  get routeList() {
-    return this.getSubComponent($routeList)
   }
 
   get componentType() {

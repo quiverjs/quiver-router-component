@@ -4,7 +4,10 @@ import { ListComponent } from 'quiver-component-base'
 import { handleableLoader } from 'quiver-component-base/util'
 
 import { assertRouteComponent } from '../util/assert'
-import { componentRoutesToIndexBuilder } from '../route-index'
+import {
+  routeIndexFromSpecs,
+  componentRoutesToIndexBuilder
+} from '../route-index'
 
 export const $defaultHandler = Symbol('@defaultHandler')
 
@@ -45,6 +48,13 @@ export class RouteList extends ListComponent {
   routeSpecs() {
     return this.routeComponents::map(
       route => route.routeSpec())
+  }
+
+  resolve(path) {
+    const routeIndex = routeIndexFromSpecs(
+      this.routeSpecs, this.defaultHandler)
+
+    return routeIndex.resolve(path)
   }
 
   routeComponents() {
