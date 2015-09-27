@@ -4,15 +4,16 @@ import {
 
 const $rawIndex = Symbol('@rawIndex')
 
-const initRawIndex = ImmutableMap()
-  .set('staticRoutes', ImmutableMap())
-  .set('dynamicRoutes', ImmutableList())
-  .set('defaultHandler', null)
+const createRawIndex = () =>
+  ImmutableMap()
+    .set('staticRoutes', ImmutableMap())
+    .set('dynamicRoutes', ImmutableList())
+    .set('defaultHandler', null)
 
-const emptyArgs = ImmutableMap()
+const emptyArgs = ImmutableMap
 
 export class RouteIndex {
-  constructor(rawIndex=initRawIndex) {
+  constructor(rawIndex = createRawIndex()) {
     this[$rawIndex] = rawIndex
   }
 
@@ -42,12 +43,13 @@ export class RouteIndex {
   }
 
   setDefaultHandler(handler) {
-    return this.rawIndex.set('defaultHandler', handler)
+    return this.setIndex(this.rawIndex.set(
+      'defaultHandler', handler))
   }
 
   resolve(path) {
     const staticHandler = this.staticRoutes.get(path)
-    if(staticHandler) return [staticHandler, emptyArgs]
+    if(staticHandler) return [staticHandler, emptyArgs()]
 
     for(let [matcher, handler] of this.dynamicRoutes.values()) {
       const extractedArgs = matcher(path)
@@ -55,7 +57,7 @@ export class RouteIndex {
       if(extractedArgs) return [handler, extractedArgs]
     }
 
-    return this.defaultHandler
+    return [this.defaultHandler, emptyArgs()]
   }
 
   get rawIndex() {

@@ -5,7 +5,7 @@ export class StaticRoute extends Route {
   routeSpec() {
     return ImmutableMap()
       .set('routeType', 'static')
-      .set('path', this.staticPath)
+      .set('path', this.staticPath())
       .set('handler', this.routeHandler)
   }
 

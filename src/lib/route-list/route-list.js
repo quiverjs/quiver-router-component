@@ -1,6 +1,6 @@
 import { map } from 'quiver-util/iterator'
 
-import { ListComponent } from 'quiver-component-base'
+import { Component, ListComponent } from 'quiver-component-base'
 import { handleableLoader } from 'quiver-component-base/util'
 
 import { assertRouteComponent } from '../util/assert'
@@ -9,12 +9,20 @@ import {
   componentRoutesToIndexBuilder
 } from '../route-index'
 
-export const $defaultHandler = Symbol('@defaultHandler')
+const $routeList = Symbol('@routeList')
+const $defaultHandler = Symbol('@defaultHandler')
 
-export class RouteList extends ListComponent {
+export class RouteList extends Component {
+  constructor(options) {
+    super(options)
+
+    this.setSubComponent($routeList, new ListComponent())
+  }
+
   addRoute(route) {
     this.assertRoute(route)
-    return this.appendComponent(route)
+    this.rawList.appendComponent(route)
+    return this
   }
 
   assertRoute(route) {
@@ -37,8 +45,8 @@ export class RouteList extends ListComponent {
     return handleableLoader
   }
 
-  defaultHandler() {
-    return this.getSubComponents($defaultHandler)
+  get defaultHandler() {
+    return this.getSubComponent($defaultHandler)
   }
 
   setDefaultHandler(defaultHandler) {
@@ -46,19 +54,25 @@ export class RouteList extends ListComponent {
   }
 
   routeSpecs() {
-    return this.routeComponents::map(
+    return this.routeComponents()::map(
       route => route.routeSpec())
   }
 
-  resolve(path) {
-    const routeIndex = routeIndexFromSpecs(
-      this.routeSpecs, this.defaultHandler)
+  routeIndex() {
+    return routeIndexFromSpecs(
+      this.routeSpecs(), this.defaultHandler)
+  }
 
-    return routeIndex.resolve(path)
+  resolve(path) {
+    return this.routeIndex().resolve(path)
   }
 
   routeComponents() {
-    return this.subComponents()
+    return this.rawList.subComponents()
+  }
+
+  get rawList() {
+    return this.getSubComponent($routeList)
   }
 
   get componentType() {
