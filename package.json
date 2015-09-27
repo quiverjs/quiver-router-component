@@ -12,11 +12,12 @@
     "url": "git@github.com:quiverjs/quiver-router-component.git"
   },
   "dependencies": {
-    "quiver-util": "~1.1.0",
-    "quiver-graph": "~1.1.2",
     "babel-runtime": "^5.8.24",
     "quiver-component-base": "~1.0.8",
-    "quiver-component-basic": "~1.0.3"
+    "quiver-component-basic": "~1.0.3",
+    "quiver-graph": "~1.1.2",
+    "quiver-stream-util": "^1.4.3",
+    "quiver-util": "~1.1.0"
   },
   "devDependencies": {
     "babel": "^5.8.23",

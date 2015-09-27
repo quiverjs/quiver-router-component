@@ -1,31 +1,17 @@
 import { map } from 'quiver-util/iterator'
 
-import { ListNode } from 'quiver-graph'
-import { StreamHandlerBuilder } from 'quiver-component-basic'
+import { ListComponent } from 'quiver-component-base'
 import { handleableLoader } from 'quiver-component-base/util'
 
-import { assertRouteComponent } from './util/assert'
+import { assertRouteComponent } from '../util/assert'
+import { componentRoutesToIndexBuilder } from '../route-index'
 
-import { componentRoutesToIndexBuilder } from './route-index'
-
-const $routes = Symbol('@routes')
 export const $defaultHandler = Symbol('@defaultHandler')
 
-const routeNode = function() {
-  return this.graph.getNode($routes)
-}
-
-export class Router extends StreamHandlerBuilder {
-  constructor(options={}) {
-    super(options)
-
-    this.graph.setNode($routes, new ListNode())
-  }
-
+export class RouteList extends ListComponent {
   addRoute(route) {
     this.assertRoute(route)
-    this::routeNode().appendNode(route.graph)
-    return this
+    return this.appendComponent(route)
   }
 
   assertRoute(route) {
@@ -62,16 +48,10 @@ export class Router extends StreamHandlerBuilder {
   }
 
   routeComponents() {
-    return this::routeNode().subNodes()
-      ::map(node => node.transpose())
-  }
-
-  *subComponents() {
-    yield* this.routeComponents()
-    yield* super.subComponents()
+    return this.subComponents()
   }
 
   get componentType() {
-    return 'Router'
+    return 'RouteList'
   }
 }

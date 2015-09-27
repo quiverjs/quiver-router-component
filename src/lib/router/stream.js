@@ -1,12 +1,9 @@
 import { error } from 'quiver-util/error'
+import { StreamHandlerBuilder } from 'quiver-component-basic'
 
-import {
-  assertStreamHandlerComponent, streamHandlerLoader
-} from 'quiver-component-basic/util'
+import { StreamRouteList } from './route-list'
 
-import { Router } from './router'
-import { defaultStreamHandler } from './default'
-import { assertStreamRouteComponent } from './util/assert'
+const $routeList = Symbol('@routeList')
 
 const indexToStreamRouter = routeIndex =>
   async function(args, streamable) {
@@ -28,28 +25,24 @@ const indexBuilderToStreamRouterBuilder = routeIndexBuilder =>
     routeIndexBuilder(config)
     .then(indexToStreamRouter)
 
-export class StreamRouter extends Router {
+export class StreamRouter extends StreamHandlerBuilder {
   constructor(options) {
     super(options)
-    this.setDefaultHandler(defaultStreamHandler())
+    this.setSubComponent($routeList, new StreamRouteList())
   }
 
-  assertRoute(route) {
-    assertStreamRouteComponent(route)
-  }
-
-  setDefaultHandler(handler) {
-    assertStreamHandlerComponent(handler)
-    super.setDefaultHandler(handler)
+  addRoute(route) {
+    this.routeList.addRoute(route)
+    return this
   }
 
   streamHandlerBuilderFn() {
-    const routeIndexBuilder = this.routeIndexBuilderFn()
+    const routeIndexBuilder = this.routeList.routeIndexBuilderFn()
     return indexBuilderToStreamRouterBuilder(routeIndexBuilder)
   }
 
-  get routeHandlerLoader() {
-    return streamHandlerLoader
+  get routeList() {
+    return this.getSubComponent($routeList)
   }
 
   get componentType() {
