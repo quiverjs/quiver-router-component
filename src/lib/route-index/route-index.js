@@ -7,6 +7,7 @@ const $rawIndex = Symbol('@rawIndex')
 const initRawIndex = ImmutableMap()
   .set('staticRoutes', ImmutableMap())
   .set('dynamicRoutes', ImmutableList())
+  .set('defaultHandler', null)
 
 const emptyArgs = ImmutableMap()
 
@@ -40,6 +41,10 @@ export class RouteIndex {
     return this.setIndex(newIndex)
   }
 
+  setDefaultHandler(handler) {
+    return this.rawIndex.set('defaultHandler', handler)
+  }
+
   resolve(path) {
     const staticHandler = this.staticRoutes.get(path)
     if(staticHandler) return [staticHandler, emptyArgs]
@@ -50,7 +55,7 @@ export class RouteIndex {
       if(extractedArgs) return [handler, extractedArgs]
     }
 
-    return null
+    return this.defaultHandler
   }
 
   get rawIndex() {
@@ -64,9 +69,13 @@ export class RouteIndex {
   get dynamicRoutes() {
     return this.rawIndex.get('dynamicRoutes')
   }
+
+  get defaultHandler() {
+    return this.rawIndex.get('defaultHandler')
+  }
 }
 
-export const routeIndexFromSpecs = routeSpecs => {
+export const routeIndexFromSpecs = (routeSpecs, defaultHandler) => {
   let index = new RouteIndex()
 
   for(let routeSpec of routeSpecs) {
@@ -85,6 +94,8 @@ export const routeIndexFromSpecs = routeSpecs => {
       throw new Error(`invalid route type ${routeType} for route specs: ${routeSpecs}`)
     }
   }
+
+  index = index.setDefaultHandler(defaultHandler)
 
   return index
 }

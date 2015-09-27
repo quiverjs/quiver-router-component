@@ -1,6 +1,5 @@
 import { map } from 'quiver-util/iterator'
 import { asyncMap } from 'quiver-util/promise'
-import { bindLoader } from 'quiver-component-base/util'
 
 export const mapHandlers = function(mapper) {
   return this::map(routeSpec => {
@@ -17,10 +16,3 @@ export const asyncMapHandlers = function(mapper) {
     return routeSpec.set('handler', mapped)
   })
 }
-
-export const handlerComponentsToLoaders = (routeSpecs, loader) =>
-  routeSpecs::mapHandlers(handlerComponent =>
-    bindLoader(handlerComponent, loader))
-
-export const loadersToHandlers = (config, routeSpecs) =>
-  routeSpecs::asyncMapHandlers(loader => loader(config))

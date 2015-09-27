@@ -2,8 +2,11 @@ import { map } from 'quiver-util/iterator'
 
 import { ListNode } from 'quiver-graph'
 import { StreamHandlerBuilder } from 'quiver-component-basic'
+import { handleableLoader } from 'quiver-component-base/util'
 
 import { assertRouteComponent } from './util/assert'
+
+import { componentRoutesToIndexBuilder } from './route-index'
 
 const $routes = Symbol('@routes')
 export const $defaultHandler = Symbol('@defaultHandler')
@@ -27,6 +30,22 @@ export class Router extends StreamHandlerBuilder {
 
   assertRoute(route) {
     assertRouteComponent(route)
+  }
+
+  routeIndexBuilderFn() {
+    const componentRoutes = this.routeSpecs()
+    const defaultHandler = this.defaultHandler()
+    const handlerLoader = this.routeHandlerLoader
+
+    if(!defaultHandler)
+      throw new Error('default route handler is not set')
+
+    return componentRoutesToIndexBuilder(
+      componentRoutes, defaultHandler, handlerLoader)
+  }
+
+  get routeHandlerLoader() {
+    return handleableLoader
   }
 
   defaultHandler() {
