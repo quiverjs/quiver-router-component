@@ -2,11 +2,7 @@ import test from 'tape'
 import { asyncTest } from 'quiver-util/tape'
 import { timeout } from 'quiver-util/promise'
 
-import {
-  createConfig, loadHandler, simpleHandlerLoader
-} from 'quiver-component-base/util'
-
-import { createArgs } from 'quiver-component-basic/util'
+import { createConfig } from 'quiver-component-base/util'
 
 import { emptyStreamable, streamableToText } from 'quiver-stream-util'
 
@@ -121,6 +117,7 @@ test('plain route list test', assert => {
     const sendRequest = async function(path) {
       const [handler, args] = routeIndex.resolve(path)
       assert.ok(handler)
+      assert.ok(args)
 
       const streamable = await handler(args, emptyStreamable())
       return streamableToText(streamable)
