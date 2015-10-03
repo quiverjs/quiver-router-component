@@ -1,1 +1,3 @@
-export * from './route/constructor'
+export {
+  staticRoute, dynamicRoute, paramRoute, regexRoute
+} from './route/constructor'

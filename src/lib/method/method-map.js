@@ -1,5 +1,5 @@
 import { map } from 'quiver-util/iterator'
-import { Component } from 'quiver-component-base'
+import { MapComponent } from 'quiver-component-base'
 import { ImmutableMap } from 'quiver-util/immutable'
 
 import {
@@ -19,19 +19,19 @@ const methodIndexBuilder = methodRoutes =>
     return ImmutableMap(entries)
   }
 
-export class MethodMap extends Component {
+export class MethodMap extends MapComponent {
   addRoute(method, handler) {
     if(typeof(method) !== 'string')
       throw new TypeError('method must be string')
 
     assertHttpHandlerComponent(handler)
 
-    this.setSubComponent(method, handler)
+    this.setComponent(method, handler)
     return this
   }
 
   methodSpecs() {
-    return this.subComponentEntries()
+    return this.mapEntries()
       ::map(([method, handler]) =>
         ImmutableMap({ method, handler }))
   }
