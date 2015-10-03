@@ -18,7 +18,7 @@ import {
 
 import { HttpRouter } from '../lib/router'
 
-test::asyncTest('integrated stream router test', async function(assert) {
+test::asyncTest('integrated http router test', async function(assert) {
   const loadOrder = []
 
   const staticHandler = httpHandlerBuilder(

@@ -21,7 +21,8 @@ const HEADHandler = GETHandler =>
     const [ responseHead, responseStreamable ] = await GETHandler(
       requestHead, requestStreamable)
 
-    return [ responseHead, emptyStreamable() ]
+    closeStreamable(responseStreamable)
+    return [responseHead, emptyStreamable()]
   }
 
 export const addAuxMethodHandlers = methodIndex => {
