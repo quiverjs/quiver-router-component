@@ -12,10 +12,10 @@ const handlerBuildersToHandlers = (config, routeSpecs) =>
 const handlerBuilderRoutesToIndexBuilder =
 (handlerBuilderRoutes, defaultHandlerBuilder) =>
   async function(config) {
-    const defaultHandler = await defaultHandlerBuilder(config)
-
     const handlerRoutes = await handlerBuildersToHandlers(
       config, handlerBuilderRoutes)
+
+    const defaultHandler = await defaultHandlerBuilder(config)
 
     return routeIndexFromSpecs(handlerRoutes, defaultHandler)
   }

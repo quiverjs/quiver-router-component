@@ -31,7 +31,7 @@ export class RouteList extends Component {
 
   routeIndexBuilderFn() {
     const componentRoutes = this.routeSpecs()
-    const defaultHandler = this.defaultHandler()
+    const defaultHandler = this.defaultHandler
     const handlerLoader = this.routeHandlerLoader
 
     if(!defaultHandler)
@@ -50,7 +50,8 @@ export class RouteList extends Component {
   }
 
   setDefaultHandler(defaultHandler) {
-    return this.setSubComponents($defaultHandler, defaultHandler)
+    this.setSubComponent($defaultHandler, defaultHandler)
+    return this
   }
 
   routeSpecs() {

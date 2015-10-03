@@ -28,7 +28,7 @@ export class StreamRouteList extends RouteList {
 
   setDefaultHandler(handler) {
     assertStreamHandlerComponent(handler)
-    super.setDefaultHandler(handler)
+    return super.setDefaultHandler(handler)
   }
 
   get routeHandlerLoader() {
