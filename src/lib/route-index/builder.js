@@ -1,18 +1,14 @@
 import { bindLoader } from 'quiver-component-base/util'
-import { mapHandlers, asyncMapHandlers } from './route-specs'
 import { routeIndexFromSpecs } from './route-index'
 
-const componentRoutesToLoaderRoutes = (routeSpecs, loader) =>
-  routeSpecs::mapHandlers(handlerComponent =>
-    bindLoader(handlerComponent, loader))
-
-const handlerBuildersToHandlers = (config, routeSpecs) =>
-  routeSpecs::asyncMapHandlers(loader => loader(config))
+import {
+  componentToLoaderRoutes, buildHandlers
+} from '../route-specs'
 
 const handlerBuilderRoutesToIndexBuilder =
 (handlerBuilderRoutes, defaultHandlerBuilder) =>
   async function(config) {
-    const handlerRoutes = await handlerBuildersToHandlers(
+    const handlerRoutes = await buildHandlers(
       config, handlerBuilderRoutes)
 
     const defaultHandler = await defaultHandlerBuilder(config)
@@ -22,7 +18,7 @@ const handlerBuilderRoutesToIndexBuilder =
 
 export const componentRoutesToIndexBuilder =
 (componentRouteSpecs, defaultHandlerComponent, handlerLoader) => {
-  const loaderRoutes = componentRoutesToLoaderRoutes(
+  const loaderRoutes = componentToLoaderRoutes(
     componentRouteSpecs, handlerLoader)
 
   const defaulHandlerLoader = bindLoader(
