@@ -1,5 +1,7 @@
 import { assertComponent } from 'quiver-component-base/util'
-import { assertStreamHandlerComponent } from 'quiver-component-basic/util'
+import {
+  assertStreamHandlerComponent, assertHttpHandlerComponent
+} from 'quiver-component-basic/util'
 
 export const assertRouteComponent = route => {
   assertComponent(route, 'route must be component')
@@ -11,4 +13,9 @@ export const assertRouteComponent = route => {
 export const assertStreamRouteComponent = route => {
   assertRouteComponent(route)
   assertStreamHandlerComponent(route.routeHandler)
+}
+
+export const assertHttpRouteComponent = route => {
+  assertRouteComponent(route)
+  assertHttpHandlerComponent(route.routeHandler)
 }

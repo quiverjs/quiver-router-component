@@ -4,7 +4,9 @@ import { timeout } from 'quiver-util/promise'
 
 import { createConfig } from 'quiver-component-base/util'
 
-import { emptyStreamable, streamableToText } from 'quiver-stream-util'
+import {
+  emptyStreamable, streamableToText
+} from 'quiver-stream-util'
 
 import {
   simpleHandler, simpleHandlerBuilder
