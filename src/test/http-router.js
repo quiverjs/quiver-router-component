@@ -13,7 +13,7 @@ import {
 } from 'quiver-stream-util'
 
 import {
-  httpHandlerBuilder
+  httpHandlerBuilder, simpleHandlerBuilder
 } from 'quiver-component-basic/constructor'
 
 import { HttpRouter } from '../lib/router'
@@ -21,18 +21,19 @@ import { HttpRouter } from '../lib/router'
 test::asyncTest('integrated http router test', async function(assert) {
   const loadOrder = []
 
-  const staticHandler = httpHandlerBuilder(
+  const staticHandler = simpleHandlerBuilder(
     async function(config) {
       await timeout(100)
       loadOrder.push('static')
 
-      return (requestHead, streamable) => {
+      return (args, streamable) => {
+        const requestHead = args.get('requestHead')
         assert.equal(requestHead.method, 'GET')
-        const responseHead = new ResponseHead()
-          .setStatus(200)
-
-        return [responseHead, textToStreamable('static path')]
+        return 'static path'
       }
+    }, {
+      inputType: 'empty',
+      outputType: 'text'
     })
 
   const paramHandler = httpHandlerBuilder(

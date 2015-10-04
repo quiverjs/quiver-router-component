@@ -11,23 +11,36 @@ import {
   emptyStreamable, streamableToText, textToStreamable
 } from 'quiver-stream-util'
 
-import { httpHandler } from 'quiver-component-basic/constructor'
+import {
+  httpHandler, simpleHandler
+} from 'quiver-component-basic/constructor'
 
 import { MethodRouter } from '../lib/method'
 
 test::asyncTest('integrated method router test', async function(assert) {
-  const defineHandler = (methods, result) =>
+  const defineHandler = (method, result) =>
     httpHandler((requestHead, streamable) => {
-      assert.ok(methods.includes(requestHead.method))
+      assert.equals(requestHead.method, method)
       const responseHead = new ResponseHead()
         .setStatus(200)
 
       return [responseHead, textToStreamable(result)]
     })
 
-  const readHandler = defineHandler(['GET', 'HEAD'], 'read result')
-  const updateHandler = defineHandler(['POST'], 'update result')
-  const createHandler = defineHandler(['PUT'], 'create result')
+  const updateHandler = defineHandler('POST', 'update result')
+  const createHandler = defineHandler('PUT', 'create result')
+
+  const readHandler = simpleHandler(
+    args => {
+      const requestHead = args.get('requestHead')
+      const { method } = requestHead
+      assert.ok(method === 'GET' || method === 'HEAD')
+
+      return 'read result'
+    }, {
+      inputType: 'empty',
+      outputType: 'text'
+    })
 
   const router = new MethodRouter()
     .addRoute('GET', readHandler)

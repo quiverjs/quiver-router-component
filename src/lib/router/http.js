@@ -1,7 +1,8 @@
 import { error } from 'quiver-util/error'
 import { HttpHandlerBuilder } from 'quiver-component-basic'
+import { streamToHttpHandler } from 'quiver-component-basic/constructor'
 
-import { routerClass } from './router'
+import { routerClass, $wrapHandler } from './router'
 import { HttpRouteList } from '../route-list'
 
 const indexToHttpRouter = routeIndex =>
@@ -30,6 +31,14 @@ export class HttpRouter extends Router {
   httpHandlerBuilderFn() {
     const routeIndexBuilder = this.routeList.routeIndexBuilderFn()
     return indexBuilderToHttpRouterBuilder(routeIndexBuilder)
+  }
+
+  [$wrapHandler](handler) {
+    if(handler.isStreamHandlerComponent) {
+      return streamToHttpHandler(handler)
+    }
+
+    return handler
   }
 
   get componentType() {

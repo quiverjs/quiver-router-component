@@ -1,4 +1,5 @@
 import { HttpHandlerBuilder } from 'quiver-component-basic'
+import { streamToHttpHandler } from 'quiver-component-basic/constructor'
 
 import { MethodMap } from './method-map'
 import { addAuxMethodHandlers } from './aux-handler'
@@ -31,6 +32,10 @@ export class MethodRouter extends HttpHandlerBuilder {
   }
 
   addRoute(method, handler) {
+    if(handler.isStreamHandlerComponent) {
+      handler = streamToHttpHandler(handler)
+    }
+
     this::methodMap().addRoute(method, handler)
     return this
   }

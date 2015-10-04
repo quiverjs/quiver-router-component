@@ -17,7 +17,7 @@
     "quiver-http-head": "^1.0.0",
     "quiver-stream-util": "^1.4.3",
     "quiver-component-base": "~1.0.10",
-    "quiver-component-basic": "~1.0.6"
+    "quiver-component-basic": "~1.0.7"
   },
   "devDependencies": {
     "tape": "^4.0.1",
