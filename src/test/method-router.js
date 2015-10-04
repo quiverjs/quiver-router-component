@@ -47,6 +47,10 @@ test::asyncTest('integrated method router test', async function(assert) {
     .addRoute('POST', updateHandler)
     .addRoute('PUT', createHandler)
 
+  assert.equal(router.resolve('POST'), updateHandler)
+  assert.notEqual(router.resolve('GET'), readHandler,
+    'should resolve to http handler that wraps the stream handler')
+
   const handler = await loadHandler(createConfig(), router)
 
   const sendRequest = async function(method) {

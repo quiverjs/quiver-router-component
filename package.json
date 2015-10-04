@@ -6,7 +6,7 @@
   },
   "name": "quiver-router-component",
   "desription": "Route requests to different components based on paths",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/quiverjs/quiver-router-component",
   "repository": {
     "url": "git@github.com:quiverjs/quiver-router-component.git"

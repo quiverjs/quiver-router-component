@@ -36,6 +36,10 @@ export class MethodMap extends MapComponent {
         ImmutableMap({ method, handler }))
   }
 
+  resolve(method) {
+    return this.getComponent(method)
+  }
+
   methodIndexBuilderFn() {
     const methodSpecs = this.methodSpecs()
     const loaderRoutes = componentToLoaderRoutes(

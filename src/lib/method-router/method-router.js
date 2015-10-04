@@ -40,6 +40,10 @@ export class MethodRouter extends HttpHandlerBuilder {
     return this
   }
 
+  resolve(method) {
+    return this::methodMap().resolve(method)
+  }
+
   httpHandlerBuilderFn() {
     const indexBuilder = this::methodMap().methodIndexBuilderFn()
     return methodRouterBuilder(indexBuilder, this[$enableAuxMethods])
