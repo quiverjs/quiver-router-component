@@ -6,7 +6,7 @@ import {
   createConfig, loadHandler
 } from 'quiver-component-base/util'
 
-import { RequestHead, ResponseHead } from 'quiver-http-head'
+import { RequestHead } from 'quiver-http-head'
 
 import {
   emptyStreamable, streamableToText, textToStreamable
@@ -16,7 +16,7 @@ import {
   httpHandlerBuilder, simpleHandlerBuilder
 } from 'quiver-component-basic/constructor'
 
-import { HttpRouter } from '../lib/router'
+import { httpRouter } from '../lib/constructor'
 
 test::asyncTest('integrated http router test', async function(assert) {
   const loadOrder = []
@@ -52,7 +52,7 @@ test::asyncTest('integrated http router test', async function(assert) {
         assert.equal(requestHead.path, '/person/john/rest/path',
           'requestHead should have original path')
 
-        const responseHead = new ResponseHead()
+        const responseHead = requestHead.createResponseHead()
           .setStatus(200)
 
         return [responseHead, textToStreamable('param path')]
@@ -68,14 +68,14 @@ test::asyncTest('integrated http router test', async function(assert) {
         assert.equal(requestHead.method, 'PUT')
         assert.equal(requestHead.path, '/random/path')
 
-        const responseHead = new ResponseHead()
+        const responseHead = requestHead.createResponseHead()
           .setStatus(200)
 
         return [responseHead, textToStreamable('default path')]
       }
     })
 
-  const router = new HttpRouter()
+  const router = httpRouter()
     .setDefaultHandler(defaultHandler)
     .addStaticRoute('/static', staticHandler)
     .addParamRoute('/person/:name/:restpath', paramHandler)

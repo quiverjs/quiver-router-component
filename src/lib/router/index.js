@@ -1,5 +1,5 @@
-export { routeClass } from './router'
+export { routerClass } from './router'
 
-export { StreamRouter } from './stream'
+export { StreamRouter, streamRouter } from './stream'
 
-export { HttpRouter } from './http'
+export { HttpRouter, httpRouter } from './http'

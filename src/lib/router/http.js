@@ -45,3 +45,5 @@ export class HttpRouter extends Router {
     return 'HttpRouter'
   }
 }
+
+export const httpRouter = () => new HttpRouter()

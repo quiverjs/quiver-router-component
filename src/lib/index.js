@@ -4,4 +4,4 @@ export {
 
 export { StreamRouter, HttpRouter } from './router'
 
-export { MethodRouter } from './method'
+export { MethodRouter } from './method-router'

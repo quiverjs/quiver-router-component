@@ -1,4 +1,3 @@
-import { ResponseHead } from 'quiver-http-head'
 import { closeStreamable, emptyStreamable } from 'quiver-stream-util'
 
 export const methodIndexToHttpHandler = methodIndex => {
@@ -11,7 +10,7 @@ export const methodIndexToHttpHandler = methodIndex => {
     if(handler) return handler(requestHead, requestStreamable)
 
     closeStreamable(requestStreamable)
-    const responseHead = new ResponseHead()
+    const responseHead = requestHead.createResponseHead()
       .setStatus(405)
       .setHeader('content-length', '0')
       .setHeader('allow', allowedMethods)

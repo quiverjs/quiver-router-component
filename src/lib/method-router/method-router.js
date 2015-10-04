@@ -45,3 +45,5 @@ export class MethodRouter extends HttpHandlerBuilder {
     return methodRouterBuilder(indexBuilder, this[$enableAuxMethods])
   }
 }
+
+export const methodRouter = () => new MethodRouter()

@@ -35,3 +35,5 @@ export class StreamRouter extends Router {
     return 'StreamRouter'
   }
 }
+
+export const streamRouter = () => new StreamRouter()

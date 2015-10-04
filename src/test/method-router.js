@@ -5,7 +5,7 @@ import {
   createConfig, loadHandler
 } from 'quiver-component-base/util'
 
-import { RequestHead, ResponseHead } from 'quiver-http-head'
+import { RequestHead } from 'quiver-http-head'
 
 import {
   emptyStreamable, streamableToText, textToStreamable
@@ -15,13 +15,13 @@ import {
   httpHandler, simpleHandler
 } from 'quiver-component-basic/constructor'
 
-import { MethodRouter } from '../lib/method'
+import { methodRouter } from '../lib/constructor'
 
 test::asyncTest('integrated method router test', async function(assert) {
   const defineHandler = (method, result) =>
     httpHandler((requestHead, streamable) => {
       assert.equals(requestHead.method, method)
-      const responseHead = new ResponseHead()
+      const responseHead = requestHead.createResponseHead()
         .setStatus(200)
 
       return [responseHead, textToStreamable(result)]
@@ -42,7 +42,7 @@ test::asyncTest('integrated method router test', async function(assert) {
       outputType: 'text'
     })
 
-  const router = new MethodRouter()
+  const router = methodRouter()
     .addRoute('GET', readHandler)
     .addRoute('POST', updateHandler)
     .addRoute('PUT', createHandler)

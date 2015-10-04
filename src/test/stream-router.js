@@ -14,8 +14,7 @@ import {
   simpleHandlerBuilder, httpHandler
 } from 'quiver-component-basic/constructor'
 
-import { StreamRouter } from '../lib/router'
-import { staticRoute } from '../lib/route/constructor'
+import { staticRoute, streamRouter } from '../lib/constructor'
 
 test::asyncTest('integrated stream router test', async function(assert) {
   const loadOrder = []
@@ -62,7 +61,7 @@ test::asyncTest('integrated stream router test', async function(assert) {
       outputType: 'text'
     })
 
-  const router = new StreamRouter()
+  const router = streamRouter()
     .setDefaultHandler(defaultHandler)
     .addStaticRoute('/static', staticHandler)
     .addParamRoute('/person/:name/:restpath', paramHandler)
