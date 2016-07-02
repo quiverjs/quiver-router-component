@@ -49,8 +49,11 @@ test::asyncTest('integrated http router test', async function(assert) {
         assert.equal(args.get('path'), '/rest/path',
           'args.path should have extracted subpath')
 
-        assert.equal(requestHead.path, '/person/john/rest/path',
+        assert.equal(requestHead.path, '/person/john/rest/path?foo=bar',
           'requestHead should have original path')
+
+        assert.equal(requestHead.pathname, '/person/john/rest/path',
+          'requestHead should have original pathname')
 
         const responseHead = requestHead.createResponseHead()
           .setStatus(200)
@@ -101,7 +104,7 @@ test::asyncTest('integrated http router test', async function(assert) {
   const res1 = await sendRequest('GET', '/static')
   assert.equal(res1, 'static path')
 
-  const res2 = await sendRequest('POST', '/person/john/rest/path')
+  const res2 = await sendRequest('POST', '/person/john/rest/path?foo=bar')
   assert.equal(res2, 'param path')
 
   const res3 = await sendRequest('PUT', '/random/path')

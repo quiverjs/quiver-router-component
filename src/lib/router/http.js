@@ -7,7 +7,7 @@ import { HttpRouteList } from '../route-list'
 
 const indexToHttpRouter = routeIndex =>
   async function(requestHead, streamable) {
-    const path = requestHead.args.get('path') || requestHead.path || '/'
+    const path = requestHead.args.get('path') || requestHead.pathname || '/'
     if(typeof(path) !== 'string')
       throw error(400, 'request path must be string')
 

@@ -6,17 +6,17 @@
   },
   "name": "quiver-router-component",
   "desription": "Route requests to different components based on paths",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "homepage": "https://github.com/quiverjs/quiver-router-component",
   "repository": {
     "url": "git@github.com:quiverjs/quiver-router-component.git"
   },
   "dependencies": {
-    "quiver-util": "^1.2.1",
+    "quiver-util": "^1.2.3",
     "quiver-stream-util": "^1.4.6",
     "quiver-component-base": "^1.1.0",
     "quiver-component-basic": "^1.1.0",
-    "quiver-http-head": "^1.0.2"
+    "quiver-http-head": "^1.0.4"
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
