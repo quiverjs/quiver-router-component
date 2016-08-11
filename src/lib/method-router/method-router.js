@@ -51,3 +51,6 @@ export class MethodRouter extends HttpHandlerBuilder {
 }
 
 export const methodRouter = () => new MethodRouter()
+
+export const methodRoute = (method, handler) =>
+  methodRouter().addRoute(method, handler)

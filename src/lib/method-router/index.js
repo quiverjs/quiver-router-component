@@ -1,1 +1,3 @@
-export { MethodRouter, methodRouter } from './method-router'
+export {
+  MethodRouter, methodRouter, methodRoute 
+} from './method-router'
