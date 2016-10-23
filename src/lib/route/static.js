@@ -1,7 +1,20 @@
 import { Route } from './route'
 import { ImmutableMap } from 'quiver-util/immutable'
 
+const $staticPath = Symbol('@staticPath')
+
 export class StaticRoute extends Route {
+  constructor(options={}) {
+    const { staticPath } = options
+
+    if(typeof(staticPath) != 'string')
+      throw new TypeError('options.staticPath must be string')
+
+    super(options)
+
+    this.rawComponent[$staticPath] = staticPath
+  }
+
   routeSpec() {
     return ImmutableMap()
       .set('routeType', 'static')
@@ -10,7 +23,7 @@ export class StaticRoute extends Route {
   }
 
   staticPath() {
-    throw new Error('abstract method staticPath() is not implemented')
+    return this[$staticPath]
   }
 
   get componentType() {
@@ -22,13 +35,5 @@ export class StaticRoute extends Route {
   }
 }
 
-export const staticRoute = (staticPath, routeHandler) => {
-  if(typeof(staticPath) != 'string')
-    throw new TypeError('options.staticPath must be string')
-
-  const route = new StaticRoute({ routeHandler })
-
-  route.staticPath = () => staticPath
-
-  return route
-}
+export const staticRoute = (staticPath, routeHandler) =>
+  new StaticRoute({ staticPath, routeHandler })

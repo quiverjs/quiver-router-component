@@ -1,17 +1,37 @@
-import { DynamicRoute } from './dynamic'
-import { regexMatcher } from './matcher'
+import { ImmutableList, isImmutableList } from 'quiver-util/immutable'
 
-export class RegexRoute extends DynamicRoute {
+import { regexMatcher } from './matcher'
+import { AbstractDynamicRoute } from './dynamic'
+
+const $routeRegex = Symbol('@routeRegex')
+const $matchFields = Symbol('@matchFields')
+
+export class RegexRoute extends AbstractDynamicRoute {
+  constructor(options={}) {
+    const { routeRegex, matchFields } = options
+
+    if(!(routeRegex instanceof RegExp))
+      throw new TypeError('routeRegex must be regular expression')
+
+    if(!isImmutableList(matchFields))
+      throw new TypeError('matchFields must be ImmutableList')
+
+    super(options)
+
+    this.rawComponent[$routeRegex] = routeRegex
+    this.rawComponent[$matchFields] = matchFields
+  }
+
   matcherFn() {
-    regexMatcher(this.routeRegex(), this.matchFields())
+    regexMatcher(this.routeRegex(), [...this.matchFields()])
   }
 
   routeRegex() {
-    throw new Error('abstract method routeRegex() is not implemented')
+    return this[$routeRegex]
   }
 
   matchFields() {
-    throw new Error('abstract method matchFields() is not implemented')
+    return this[$matchFields]
   }
 
   get componentType() {
@@ -19,16 +39,8 @@ export class RegexRoute extends DynamicRoute {
   }
 }
 
-export const regexRoute = (regex, matchFieldsArray, routeHandler) => {
-  if(!(regex instanceof RegExp))
-    throw new TypeError('regex must be regular expression')
-
-  const matchFields = matchFieldsArray.slice()
-
-  const route = new RegexRoute({ routeHandler })
-
-  route.routeRegex = () => regex
-  route.matchFields = () => matchFields.slice()
-
-  return route
-}
+export const regexRoute = (routeRegex, matchFields, routeHandler) =>
+  new RegexRoute({
+    routeRegex, routeHandler,
+    matchFields: ImmutableList(matchFields)
+  })

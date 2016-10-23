@@ -2,7 +2,9 @@ import { Route } from './route'
 import { ImmutableMap } from 'quiver-util/immutable'
 import { assertFunction } from 'quiver-util/assert'
 
-export class DynamicRoute extends Route {
+const $matcherFn = Symbol('@matcherFn')
+
+export class AbstractDynamicRoute extends Route {
   routeSpec() {
     return ImmutableMap()
       .set('routeType', 'dynamic')
@@ -23,11 +25,20 @@ export class DynamicRoute extends Route {
   }
 }
 
-export const dynamicRoute = (matcher, routeHandler) => {
-  assertFunction(matcher, 'matcher must be function')
+export class DynamicRoute extends AbstractDynamicRoute {
+  constructor(options={}) {
+    const { matcherFn } = options
+    assertFunction(matcherFn, 'matcherFn must be function')
 
-  const route = new DynamicRoute({ routeHandler })
-  route.matcherFn = () => matcher
+    super(options)
 
-  return route
+    this.rawComponent[$matcherFn] = matcherFn
+  }
+
+  matcherFn() {
+    return this[$matcherFn]
+  }
 }
+
+export const dynamicRoute = (matcherFn, routeHandler) =>
+  new DynamicRoute({ matcherFn, routeHandler })
